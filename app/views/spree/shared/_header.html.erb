@@ -1,0 +1,23 @@
+<nav class='navbar navbar-default navbar-static-top' role='navigation' style="background-color: white;border: none;">
+  <div class='container'>
+    <%= content_tag :ul, class: 'nav navbar-nav' do %>
+      <% @taxonomies.each do |taxonomy| %>
+        <%= content_tag :li do %>
+          <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' }, 'aria-haspopup' => 'true' do %>
+            <%= taxonomy.name %> <span class='caret'></span>
+          <% end %>
+          <%= nav_tree(taxonomy.root, @taxon) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= content_tag :ul, class: 'nav navbar-nav navbar-right' do %>
+      <li id="link-to-cart" data-hook>
+        <noscript>
+          <%= link_to Spree.t(:cart), '/cart' %>
+        </noscript>
+        &nbsp;
+      </li>
+      <script>Spree.fetch_cart('<%= j spree.cart_link_url %>')</script>
+    <% end %>
+  </div>
+</nav>

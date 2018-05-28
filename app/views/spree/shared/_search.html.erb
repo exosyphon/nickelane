@@ -1,0 +1,3 @@
+<%= form_tag spree.products_path, method: :get, class: 'form-inline' do %>
+  <%= search_field_tag :keywords, params[:keywords], placeholder: t('spree.search'), style: 'width: 130px;margin-right: 1em;', class: 'form-control my-sm-0'%>
+<% end %>

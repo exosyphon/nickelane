@@ -1,0 +1,40 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="ie ie6" lang="<%= I18n.locale %>"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7" lang="<%= I18n.locale %>"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8" lang="<%= I18n.locale %>"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9" lang="<%= I18n.locale %>"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="<%= I18n.locale %>"><!--<![endif]-->
+  <head data-hook="inside_head">
+    <%= render partial: 'spree/shared/head' %>
+  </head>
+  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body" style="margin-top: 2em;">
+
+    <div style="display: flex;justify-content: space-between;">
+      <span></span>
+      <figure id="logo" data-hook>
+        <%= logo img_options: { class: 'img-responsive', width: '450' } %>
+      </figure>
+      <%= render partial: 'spree/shared/search' %>
+    </div>
+    <%= render partial: 'spree/shared/header' %>
+
+    <div class="container" style="width: 100%;display: flex;justify-content: center;">
+      <div id="wrapper" class="row" style="width: 100%" data-hook>
+
+        <div id="content" class="columns <%= !content_for?(:sidebar) ? "sixteen" : "twelve omega" %>" data-hook>
+          <%= flash_messages %>
+          <%= yield %>
+        </div>
+
+        <%= yield :templates %>
+
+        <% if(@product.present?) %>
+          <%= link_to("<- Back", :back, class: "btn btn-primary") %>
+        <% elsif(@taxon.present? && @taxon.parent.present? && @taxon.parent.name.present?) %>
+          <%= link_to("<- Back to #{@taxon.parent.name}", seo_url(@taxon.parent), class: "btn btn-primary") %>
+        <% end %>
+      </div>
+    </div>
+  </body>
+  <%= render partial: 'spree/shared/footer' %>
+</html>
