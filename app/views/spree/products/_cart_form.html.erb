@@ -1,0 +1,58 @@
+<%= form_for :order, :url => populate_orders_path, html: { class: 'form-inline' } do |f| %>
+  <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+    <% if @product.price_in(current_currency) and !@product.price.nil? %>
+      <div data-hook="product_price" class="columns five <% if !@product.has_variants? %> alpha <% else %> omega <% end %>">
+
+        <div id="product-price">
+          <div>
+            <p class="price selling lead" itemprop="price">
+              <%= display_price(@product) %>
+            </p>
+            <span itemprop="priceCurrency" content="<%= @product.currency %>"></span>
+          </div>
+
+          <% if @product.master.can_supply? %>
+            <link itemprop="availability" href="http://schema.org/InStock" />
+          <% elsif @product.variants.empty? %>
+            <br />
+            <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>
+          <% end %>
+        </div>
+
+        <div class="add-to-cart form-group">
+          <div>
+            <div style="display: inline-block;">
+              <div>
+                <%= label_tag 'Fit' %>
+              </div>
+              <%= select_tag "variant_id", options_from_collection_for_select(@product.variants_and_option_values(current_currency).map{|v| struct = OpenStruct.new;struct.id = v.id;struct.name = variant_options(v); struct }, "id", "name", disabled: @product.variants.select{|v| !v.can_supply? }.map(&:id)), :style => 'width: 200px;' %>
+            </div>
+            <div style="display: inline-block;">
+              <div>
+                <%= label_tag 'Quantity' %>
+              </div>
+              <%= number_field_tag :quantity, 1, :class => 'title form-control', :style => 'width: 50px;', :min => 1 %>
+            </div>
+          </div>
+          <div>
+            <% if(@product.variants.empty? ) %>
+              <%= button_tag :class => "large primary", :disabled => true, :style => 'margin: 1em 0;', :id => 'add-to-cart-button', :type => :submit, class: 'btn btn-success' do %>
+                <%= Spree.t(:out_of_stock) %>
+              <% end %>
+            <% else %>
+              <%= button_tag :class => "large primary", :style => 'margin: 1em 0;', :id => 'add-to-cart-button', :type => :submit, class: 'btn btn-success' do %>
+                <%= Spree.t(:add_to_cart) %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+        <div id="product-price">
+          <br>
+          <div><span class="price selling" itemprop="price"><%= Spree.t('product_not_available_in_this_currency') %></span></div>
+        </div>
+    <% end %>
+  </div>
+<% end %>

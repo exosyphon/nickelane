@@ -9,7 +9,7 @@
   </head>
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body" style="margin-top: 2em;">
 
-    <div style="display: flex;justify-content: space-between;">
+    <div style="display: flex;justify-content: space-between;flex-wrap: wrap;">
       <span></span>
       <figure id="logo" data-hook>
         <%= logo img_options: { class: 'img-responsive', width: '450' } %>
@@ -29,9 +29,13 @@
         <%= yield :templates %>
 
         <% if(@product.present?) %>
-          <%= link_to("<- Back", :back, class: "btn btn-primary") %>
+          <div style="width: 100%;display: flex;justify-content: center;">
+            <%= link_to("<- Back", :back, class: "btn btn-primary") %>
+          </div>
         <% elsif(@taxon.present? && @taxon.parent.present? && @taxon.parent.name.present?) %>
-          <%= link_to("<- Back to #{@taxon.parent.name}", seo_url(@taxon.parent), class: "btn btn-primary") %>
+          <div style="width: 100%;display: flex;justify-content: center;">
+            <%= link_to("<- Back to #{@taxon.parent.name}", seo_url(@taxon.parent), class: "btn btn-primary") %>
+          </div>
         <% end %>
       </div>
     </div>
